@@ -1,0 +1,265 @@
+# 1st-year-projects
+//"Explore my first-year C and C++ projects. Discover my coding journey and the fundamentals of programming."//
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct Score {
+    string name;
+    int score;
+
+    Score(string n, int s) {
+        name = n;
+        score = s;
+    }
+};
+
+void save_score(Score s) {
+    ofstream file("leaderboard.txt", ios::app);
+    file << s.name << "," << s.score << endl;
+    file.close();
+}
+
+vector<Score> get_scores() {
+    vector<Score> scores;
+    ifstream file("leaderboard.txt");
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            string name;
+            int score;
+            int pos = line.find(",");
+            if (pos != -1) {
+                name = line.substr(0, pos);
+                score = stoi(line.substr(pos + 1));
+                Score s(name, score);
+                scores.push_back(s);
+            }
+        }
+        file.close();
+    }
+    return scores;
+}
+
+bool compare_scores(Score s1, Score s2) {
+    return s1.score > s2.score;
+}
+
+void print_border() {
+    cout << "==========================================================================\n";
+}
+
+int main() {
+    char play_again = 'Y';
+    while (play_again == 'Y') {
+        // Introduction and instructions
+        print_border();
+        cout << "                              QUIZ GAME\n";
+        print_border();
+        cout << "Instructions: \nAnswer each question by typing the letter of the correct answer.\nPlease note that the answers are case sensitive, so be sure to type \nyour answer exactly as it appears in the multiple choice options.\n";
+
+        // Get player name
+        string player_name;
+        cout << "\nEnter your name:";
+        cin >> player_name;
+
+        // Difficulty level selection
+        char level;
+        cout << "\nSelect difficulty level: (E)asy or (H)ard\n";
+        cin >> level;
+        cin.ignore();
+        system("clear");
+        // Set variables based on difficulty level
+        int num_questions, score;
+        string questions[23];
+        string answers[23];
+        string choices[23];
+        
+        if (level == 'E' || level == 'e') {
+            num_questions = 10;
+
+            questions[0] = "What is the capital of France?";
+            answers[0] = "B";
+            choices[0] = "A. Berlin\nB. Paris\nC. London\n";
+
+            questions[1] = "What is the highest mountain in the world?";
+            answers[1] = "A";
+            choices[1] = "A. Mount Everest\nB. K2\nC. Kangchenjunga\n";
+
+            questions[2] = "Who painted the Mona Lisa?";
+            answers[2] = "C";
+            choices[2] = "A. Vincent van Gogh\nB. Pablo Picasso\nC. Leonardo da Vinci\n";
+
+            questions[3] = "What is the largest planet in our solar system?";
+            answers[3] = "A";
+            choices[3] = "A. Jupiter\nB. Saturn\nC. Mars\nD. Earth\n";
+
+            questions[4] = "Which country is known as the 'Land of the Rising Sun'?";
+            answers[4] = "A";
+            choices[4] = "A. Japan\nB. China\nC. South Korea\nD. Thailand\n";
+            
+            questions[5] = "What is the chemical symbol for gold?";
+            answers[5] = "A";
+            choices[5] = "A. Au\nB. Ag\nC. Cu\nD. Fe\n";
+
+            questions[6] = "Which planet is known as the 'Red Planet'?";
+            answers[6] = "B";
+            choices[6] = "A. Mars\nB. Mercury\nC. Jupiter\nD. Saturn\n";
+
+            questions[7] = "What is the tallest animal in the world?";
+            answers[7] = "A";
+            choices[7] = "A. Giraffe\nB. Elephant\nC. Rhinoceros\nD. Hippopotamus\n";
+
+            questions[8] = "What is the largest ocean in the world?";
+            answers[8] = "C";
+            choices[8] = "A. Indian Ocean\nB. Atlantic Ocean\nC. Pacific Ocean\nD. Arctic Ocean\n";
+
+            questions[9] = "Who wrote the play 'Romeo and Juliet'?";
+            answers[9] = "D";
+            choices[9] = "A. William Shakespeare\nB. Mark Twain\nC. Charles Dickens\nD. None of the above\n";
+        }  if (level == 'H' || level == 'h') {
+            num_questions = 23;
+
+            questions[0] = "What does 'CPU' stand for?";
+            answers[0] = "A";
+            choices[0] = "A.Central Processing Unit\nB. Computer Processing Unit\nC.Central Power Unit\nD. Computer Power Unit\n";
+
+            questions[1] = "What does 'HTML' stand for?";
+            answers[1] = "A";
+            choices[1] = "A.  Hypertext Markup Language\nB. Hyperlink Text Markup Language\nC. High-Tech Markup Language\nD. Hypermedia Text Markup Language\n";
+
+            questions[2] = "What is the largest organ in the human body?";
+            answers[2] = "B";
+            choices[2] = "A. Heart\nB. Skin\nC. Liver\nD. Brain\n";
+
+            questions[3] = "Which social media platform is known for its character limit of 280?";
+            answers[3] = "C";
+            choices[3] = "A. Facebook\nB. Instagram\nC. Twitter\nD. LinkedI\n";
+
+            questions[4] = "What is the process of converting analog signals into digital signals called?";
+            answers[4] = "D";
+            choices[4] = "A. Encryption\nB. Decryption\nC. Modulation\nD. Analog-to-Digital Conversion\n";
+            
+            questions[5] = "Which company developed the iPhone?";
+            answers[5] = "A";
+            choices[5] = "A. Apple\nB. Samsung\nC. Google\nD. Microsoft\n";
+
+            questions[6] = "What is the most widely used programming language for web development?";
+            answers[6] = "C";
+            choices[6] = "A. Java\nB. Python\nC. JavaScript\nD. C++\n";
+
+            questions[7] = "What does 'URL' stand for?";
+            answers[7] = "B";
+            choices[7] = "A. Universal Resource Locator\nB. Uniform Resource Locator\nC. Universal Routing Link\nD.Uniform Routing Link\n";
+
+            questions[8] = "What is the world's largest social networking platform?";
+            answers[8] = "C";
+            choices[8] = "A. Twitter\nB. Instagram\nC. Facebook\nD. LinkedIn\n";
+
+            questions[9] = "Which technology is used to connect wireless devices over short distances?";
+            answers[9] = "A";
+            choices[9] = "A. Bluetooth\nB. Wi-Fi\nC. NFC\nD. GPS\n";
+            
+            questions[10] = "What is the process of making a copy of data to protect against loss called?";
+            answers[10] = "B";
+            choices[10] = "A. Encryption\nB. Backup\nC. Synchronization\nD. Compression\n";
+            
+            questions[11] = "What does 'PDF' stand for?";
+            answers[11] = "B";
+            choices[11] = "A.  Personal Document Format\nB. Portable Document Format\nC. Printed Document Format\nD. Public Document Format\n";
+        
+            questions[12] = "Which company developed the Windows operating system?";
+            answers[12] = "C";
+            choices[12] = "A. Apple\nB. Google\nC. Microsoft\nD. IBM\n";
+        
+            questions[13] = "Which technology is used to make a computer display respond to touch input?";
+            answers[13] = "D";
+            choices[13] = "A. OLED\nB. LCD\nC. LED\nD. Touchscreen\n";
+        
+            questions[14] = "Which technology is used to make a computer display respond to touch input?";
+            answers[14] = "D";
+            choices[14] = "A. OLED\nB. LCD\nC. LED\nD. Touchscreen\n";
+            
+            questions[15] = "What does 'RAM' stand for?";
+            answers[15] = "A";
+            choices[15] = "A.  Random Access Memory\nB.  Read-Only Memory\nC. Random Memory Access\nD. Read Access Memory\n";
+                
+            questions[16] = "Which search engine is known for its 'I'm Feeling Lucky' button?";
+            answers[16] = "A";
+            choices[16] = "A.  Google\nB.  Bing\nC. Yahoo\nD. DuckDuckGo\n";    
+        
+            questions[17] = "What is the process of removing unwanted parts of an image called?";
+            answers[17] = "C";
+            choices[17] = "A.   Editing\nB.  Resizing\nC. Cropping\nD. Filtering\n";    
+            
+            questions[18] = "What is the process of removing unwanted parts of an image called?";
+            answers[18] = "C";
+            choices[18] = "A.   Editing\nB.  Resizing\nC. Cropping\nD. Filtering\n";    
+            
+            questions[19] = "Which social media platform is known for its disappearing photo and video messages?";
+            answers[19] = "A";
+            choices[19] = "A.   Snapchat\nB.  TikTok\nC. WhatsApp\nD. Instagram\n"; 
+            
+            questions[20] = "What is the main function of a firewall in network security?";
+            answers[20] = "B";
+            choices[20] = "A.   Encrypting data\nB.  Filtering network traffic\nC.  Monitoring hardware performance\nD. Managing user accounts\n"; 
+        
+            questions[21] = "Which company developed the Android operating system?";
+            answers[21] = "C";
+            choices[21] = "A.   Samsung\nB.  Apple\nC. Google\nD. Microsoft\n"; 
+            
+            questions[22] = "What does 'VPN' stand for?";
+            answers[22] = "A";
+            choices[22] = "A.   Virtual Private Network\nB.  Virtual Public Network\nC. Verified Private Network\nD. Verified Public Network\n"; 
+        }
+        else{
+            cout <<"Invalid input!";
+        }
+        // Quiz loop
+        score = 0;
+        for (int i = 0; i < num_questions; i++) {
+            print_border();
+            cout << " Question " << i+1 << ":\n";
+            cout << questions[i] << "\n";
+            cout << choices[i];
+            char answer;
+            cin >> answer;
+            if (answer == answers[i][0]) {
+                cout << "Correct!\n";
+                score++;
+            } else {
+                cout << "Incorrect.\n";
+            }
+        }
+
+        // Show final score and save to leaderboard
+        print_border();
+        Score s(player_name, score);
+        save_score(s);
+        cout << "Your final score is " << score << "/" << num_questions << "\n";
+
+        // Show leaderboard
+        vector<Score> scores = get_scores();
+        sort(scores.begin(), scores.end(), compare_scores);
+        cout << "\nLEADERBOARD:\n";
+        print_border();
+        for (int i = 0; i < scores.size() && i < 5; i++) {
+            cout << " " << i+1 << ". " << scores[i].name << " - " << scores[i].score << "\n";
+        }
+
+        // Play again?
+        print_border();
+        cout << "Do you want to play again? (Y/N)\n";
+        cin >> play_again;
+        system("clear");
+    }
+    return 0;
+}
+
+
+
